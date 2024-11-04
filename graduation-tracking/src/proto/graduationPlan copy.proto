@@ -1,0 +1,59 @@
+syntax ="proto3";
+
+service GraduationPlanService {
+    rpc GetAllGraduationPlans(Empty) returns (GraduationPlanList) {}
+    rpc GetGraduationPlan(GraduationPlanId) returns (GraduationPlan) {}
+    rpc CreateGraduationPlan(GraduationPlan) returns (GraduationPlan) {}
+    rpc UpdateGraduationPlan(GraduationPlan) returns (GraduationPlan) {}
+    rpc DeleteGraduationPlan(GraduationPlanId) returns (Empty) {}
+}
+
+message Empty {}
+
+message GraduationPlanId {
+    string id = 1;
+}
+
+message GraduationPlanList {
+    repeated GraduationPlan plans = 1; // List of graduation plans
+}
+
+message GraduationPlan {
+    string id = 1;
+    string name = 2;
+    float gpax = 3; // GPA for the entire course (GPAX)
+    Course course = 4;
+    repeated YearStatus year_status = 5;
+    bool passed_courses = 6; // Indicates if course requirements are met
+}
+
+message YearStatus {
+    int32 year = 1;
+    repeated Subject subjects = 2; // Subjects registered in the year
+    float gpa = 3; // GPA for the year
+}
+
+message Course {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string department = 4;
+    repeated Subject subjects = 5;
+    GraduationRequirement requirements = 6;
+}
+
+message GraduationRequirement {
+    string id = 1;
+    int32 minCredits = 2;
+    float minGPA = 3;
+    int32 maxDuration = 4;
+}
+
+message Subject {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string department = 4;
+    int32 credits = 5;
+    string grade = 6; // Grade received for the subject (A, B, C, D, F)
+}

@@ -1,0 +1,75 @@
+syntax ="proto3";
+
+service GraduationPlanService {
+    rpc GetProfile(StudentId) returns (GraduationPlan) {}
+    rpc CreateProfile(GraduationPlanProps) returns (GraduationPlan) {}
+    rpc RegisterSubject(SubjectRegistration) returns (GraduationPlan) {}
+    rpc UpdateSubjectStatus(UpdateSubjectStatus) returns (GraduationPlan) {}
+    rpc DeleteProfile(GraduationPlanId) returns (Empty) {}
+}
+
+message Empty {}
+
+message GraduationPlanId {
+    string id = 1;
+}
+
+message SubjectRegistration {
+    string studentId = 1;
+    string subjectId = 2;
+    string year = 3;
+    string semester = 4;
+}
+
+message UpdateSubjectStatus {
+    string studentId = 1;
+    string subjectId = 2;
+    string year = 3;
+    string semester = 4;
+    float grade = 5;
+}
+
+message StudentId {
+    string id = 1;
+}
+
+message GraduationPlanList {
+    repeated GraduationPlan plans = 1; // List of graduation plans
+}
+
+message GraduationPlanProps {
+    string courseId = 1;
+    string studentId = 2;
+}
+
+message GraduationRequirement {
+    int32 minCredits = 2;
+    float minGPA = 3;
+    int32 maxDuration = 4;
+}
+
+message GraduationPlan {
+    string courseId = 1;
+    string studentId = 2;
+    string courseName = 3;
+    string courseDescription = 4;
+    float gpax = 5; // GPA for the entire course (GPAX)
+    float currentCredits = 6;
+    bool hasPassedCourses = 7; // Indicates if course requirements are met
+    repeated AcademicRecord academicRecords = 8;
+    GraduationRequirement requirements = 9;
+}
+
+message AcademicRecord {
+    string year = 1;
+    string semester = 2;
+    string gpa = 3;
+    repeated Subject subjects = 4; // Subjects registered in the year
+}
+
+message Subject {
+    string id = 1;
+    string name = 2;
+    int32 credits = 3;
+    float grade = 4;
+}
