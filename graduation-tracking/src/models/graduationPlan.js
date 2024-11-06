@@ -4,14 +4,14 @@ const subjectSchema = new mongoose.Schema({
   id: { type: String, required: true },
   name: { type: String, required: true },
   credits: { type: Number, required: true },
-  grade: { type: Number, default: 0 },
+  grade: { type: Number, default: -1 },
 })
 
 const semesterSchema = new mongoose.Schema({
   year: { type: Number, required: true },
   semester: { type: String, required: true }, // 'first', 'second' or 'summer'
-  gpa: { type: Number },
-  subjects: [subjectSchema],
+  gpa: { type: Number, default: 0 },
+  subjects: { type: [subjectSchema], default: [] },
 })
 
 const graduationPlanSchema = new mongoose.Schema(

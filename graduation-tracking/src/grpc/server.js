@@ -48,10 +48,20 @@ server.addService(graduationPlanProto.GraduationPlanService.service, {
       const plan = await GraduationPlanService.createProfile(call.request)
       callback(null, plan)
     } catch (error) {
-      callback({
-        code: grpc.status.INTERNAL,
-        details: 'Error creating graduation plan',
-      })
+      // console.log('errorXXX', error)
+      if (error.code !== undefined) {
+        // If it's already a gRPC error, pass it directly
+        callback(error)
+      } else {
+        // For other errors, use INTERNAL status
+        callback(
+          {
+            code: grpc.status.INTERNAL,
+            details: error.message,
+          },
+          null
+        )
+      }
     }
   },
 

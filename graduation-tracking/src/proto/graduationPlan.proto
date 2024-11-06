@@ -30,7 +30,7 @@ message UpdateSubjectStatus {
 }
 
 message StudentId {
-    string id = 1;
+    string studentId = 1;
 }
 
 message GraduationPlanList {

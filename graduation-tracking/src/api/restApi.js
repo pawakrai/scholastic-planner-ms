@@ -20,10 +20,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // })
 
 // Endpoint to get a specific graduation plan by user ID
-app.get('/', UserAuth, (req, res) => {
+app.get('/profile', UserAuth, (req, res) => {
   const { studentId } = req.user
-  console.log('req.user', req.user, studentId)
-  client.getProfile({ id: studentId }, (error, response) => {
+  // console.log('req.user', req.user, studentId)
+  client.getProfile({ studentId }, (error, response) => {
     if (error) {
       console.error('Error fetching graduation plan:', error)
       return res.status(500).send('Error fetching graduation plan')
@@ -33,23 +33,45 @@ app.get('/', UserAuth, (req, res) => {
 })
 
 // Endpoint to create a new graduation plan
-app.post('/', UserAuth, (req, res) => {
-  client.createProfile(req.body, (error, response) => {
+app.post('/profile', UserAuth, (req, res) => {
+  const { studentId } = req.user
+  const { courseId } = req.body
+  const profileData = { studentId, courseId }
+  client.createProfile(profileData, (error, response) => {
     if (error) {
+      console.log('error', error)
       console.error('Error creating graduation plan:', error)
-      return res.status(500).send('Error creating graduation plan')
+      return res
+        .status(500)
+        .send(`Error creating graduation plan': ${error.message}`)
     }
     res.status(201).json(response)
   })
 })
 
-// Endpoint to update an existing graduation plan by ID
-app.put('/:id', UserAuth, (req, res) => {
-  const updatedPlan = { ...req.body, id: req.params.id }
-  client.updateGraduationPlan(updatedPlan, (error, response) => {
+app.post('/registerSubject', UserAuth, (req, res) => {
+  const { studentId } = req.user
+  const { subjectId, semester, year } = req.body
+  const registerData = { studentId, subjectId, semester, year }
+  // console.log('registerData', registerData)
+  client.registerSubject(registerData, (error, response) => {
     if (error) {
-      console.error('Error updating graduation plan:', error)
-      return res.status(500).send('Error updating graduation plan')
+      console.error('Error registering subject:', error)
+      return res.status(500).send('Error registering subject')
+    }
+    res.json(response)
+  })
+})
+
+// Endpoint to update subject grade
+app.post('/updateSubject', UserAuth, (req, res) => {
+  const { studentId } = req.user
+  const { subjectId, semester, year, grade } = req.body
+  const updateData = { studentId, subjectId, semester, year, grade }
+  client.updateSubjectStatus(updateData, (error, response) => {
+    if (error) {
+      console.error('Error updating subject:', error)
+      return res.status(500).send('Error updating subject')
     }
     res.json(response)
   })
