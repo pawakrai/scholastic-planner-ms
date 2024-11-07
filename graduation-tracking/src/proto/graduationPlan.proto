@@ -5,10 +5,15 @@ service GraduationPlanService {
     rpc CreateProfile(GraduationPlanProps) returns (GraduationPlan) {}
     rpc RegisterSubject(SubjectRegistration) returns (GraduationPlan) {}
     rpc UpdateSubjectStatus(UpdateSubjectStatus) returns (GraduationPlan) {}
-    rpc DeleteProfile(GraduationPlanId) returns (Empty) {}
+    rpc DeleteProfile(StudentId) returns (DeleteProfile) {}
 }
 
 message Empty {}
+
+message DeleteProfile {
+    string message = 1;
+    GraduationPlan plans = 2;
+}
 
 message GraduationPlanId {
     string id = 1;

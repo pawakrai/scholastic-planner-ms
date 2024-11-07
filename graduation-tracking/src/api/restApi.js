@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // })
 
 // Endpoint to get a specific graduation plan by user ID
-app.get('/profile', UserAuth, (req, res) => {
+app.get('/graduation/profile', UserAuth, (req, res) => {
   const { studentId } = req.user
   // console.log('req.user', req.user, studentId)
   client.getProfile({ studentId }, (error, response) => {
@@ -33,7 +33,7 @@ app.get('/profile', UserAuth, (req, res) => {
 })
 
 // Endpoint to create a new graduation plan
-app.post('/profile', UserAuth, (req, res) => {
+app.post('/graduation/profile', UserAuth, (req, res) => {
   const { studentId } = req.user
   const { courseId } = req.body
   const profileData = { studentId, courseId }
@@ -49,7 +49,7 @@ app.post('/profile', UserAuth, (req, res) => {
   })
 })
 
-app.post('/registerSubject', UserAuth, (req, res) => {
+app.post('/graduation/registerSubject', UserAuth, (req, res) => {
   const { studentId } = req.user
   const { subjectId, semester, year } = req.body
   const registerData = { studentId, subjectId, semester, year }
@@ -64,7 +64,7 @@ app.post('/registerSubject', UserAuth, (req, res) => {
 })
 
 // Endpoint to update subject grade
-app.post('/updateSubject', UserAuth, (req, res) => {
+app.post('/graduation/updateSubject', UserAuth, (req, res) => {
   const { studentId } = req.user
   const { subjectId, semester, year, grade } = req.body
   const updateData = { studentId, subjectId, semester, year, grade }
@@ -78,8 +78,10 @@ app.post('/updateSubject', UserAuth, (req, res) => {
 })
 
 // Endpoint to delete a graduation plan by ID
-app.delete('/:id', UserAuth, (req, res) => {
-  client.deleteGraduationPlan({ id: req.params.id }, (error, response) => {
+app.delete('/graduation/delete', UserAuth, (req, res) => {
+  const { studentId } = req.user
+  console.log('studentIdxx', studentId)
+  client.deleteProfile({ studentId }, (error, response) => {
     if (error) {
       console.error('Error deleting graduation plan:', error)
       return res.status(500).send('Error deleting graduation plan')

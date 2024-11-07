@@ -247,7 +247,15 @@ class GraduationPlanService {
 
   // Delete a graduation plan by ID
   async deleteProfile(id) {
-    return await graduationPlanRepository.delete(id)
+    const deleteProfile = await graduationPlanRepository.delete(id)
+    if (!deleteProfile) {
+      throw new Error('Graduation plan not found')
+    }
+
+    return {
+      message: 'Graduation plan deleted successfully',
+      plans: deleteProfile,
+    }
   }
 
   async SubscribeEvents(payload) {

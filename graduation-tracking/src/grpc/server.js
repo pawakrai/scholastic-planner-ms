@@ -112,9 +112,11 @@ server.addService(graduationPlanProto.GraduationPlanService.service, {
   // Delete a graduation plan by ID
   deleteProfile: async (call, callback) => {
     try {
-      const deleted = await GraduationPlanService.deleteProfile(call.request.id)
+      const deleted = await GraduationPlanService.deleteProfile(
+        call.request.studentId
+      )
       if (deleted) {
-        callback(null, { success: true })
+        callback(null, deleted)
       } else {
         callback({
           code: grpc.status.NOT_FOUND,

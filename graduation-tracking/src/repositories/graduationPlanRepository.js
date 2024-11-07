@@ -22,9 +22,9 @@ class GraduationPlanRepository {
     return await GraduationPlan.findByIdAndUpdate(id, data, { new: true })
   }
 
-  // Delete a graduation plan by ID
+  // Delete a graduation plan by student ID
   async delete(id) {
-    return await GraduationPlan.findByIdAndDelete(id)
+    return await GraduationPlan.findOneAndDelete({ studentId: id })
   }
 
   // Register a subject for a student
