@@ -1,0 +1,28 @@
+version: '3'
+services:
+  courses:
+    build:
+      dockerfile: Dockerfile
+      context: ./courses
+    container_name: courses
+    ports:
+      - '7002:7002'
+    restart: always
+
+  graduation-tracking:
+    build:
+      dockerfile: Dockerfile
+      context: ./graduation-tracking
+    container_name: graduation-tracking
+    ports:
+      - '7003:7003'
+    restart: always
+
+  user:
+    build:
+      dockerfile: Dockerfile
+      context: ./user
+    container_name: user
+    ports:
+      - '7001:7001'
+    restart: always

@@ -1,6 +1,6 @@
 FROM node
 
-WORKDIR /app/courses
+WORKDIR /app/graduation-tracking
 
 COPY package.json .
 
@@ -8,6 +8,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 7002
+EXPOSE 7003
 
 CMD ["npm", "start"]

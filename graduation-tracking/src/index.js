@@ -11,5 +11,5 @@ grpcServer()
 
 // Start the REST API server on a different port or same port if using different routes.
 restApi.listen(PORT, () => {
-  console.log(`REST API running at http://localhost:${PORT || 8003}`)
+  console.log(`REST API running at http://localhost:${PORT || 7003}`)
 })
