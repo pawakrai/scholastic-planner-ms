@@ -31,13 +31,33 @@ export default (channel) => {
 
   // Create a new subject
   router.post('/create', async (req, res, next) => {
-    const { subjectId, subjectName, subjectDescription, credits } = req.body
+    const {
+      subjectId,
+      subjectName,
+      subjectDescription,
+      credits,
+      semester,
+      year,
+      isOpen,
+      date,
+      startTime,
+      endTime,
+      sec,
+    } = req.body
+
     try {
       const { data } = await service.CreateSubject({
         subjectId,
         subjectName,
         subjectDescription,
         credits,
+        semester,
+        year,
+        isOpen, // Optional field
+        date,
+        startTime,
+        endTime,
+        sec,
       })
       return res.status(200).json(data)
     } catch (error) {
@@ -48,13 +68,32 @@ export default (channel) => {
   // Update a subject
   router.put('/update/:id', async (req, res, next) => {
     const { id } = req.params
-    const { subjectName, subjectDescription, credits } = req.body
+    const {
+      subjectName,
+      subjectDescription,
+      credits,
+      semester,
+      year,
+      isOpen,
+      date,
+      startTime,
+      endTime,
+      sec,
+    } = req.body
+
     try {
       const { data } = await service.UpdateSubject({
         id,
         subjectName,
         subjectDescription,
         credits,
+        semester, // Optional field
+        year, // Optional field
+        isOpen, // Optional field
+        date, // Optional field
+        startTime, // Optional field
+        endTime, // Optional field
+        sec, // Optional field
       })
       return res.status(200).json(data)
     } catch (error) {
