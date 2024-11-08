@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graduation-tracking-deployment
+  labels:
+    app: graduation-tracking
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: graduation-tracking
+  template:
+    metadata:
+      labels:
+        app: graduation-tracking
+    spec:
+      containers:
+        - name: graduation-tracking
+          image: scholastic-planner-ms_graduation-tracking
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 7003
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: graduation-tracking-service
+spec:
+  selector:
+    app: graduation-tracking
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 7003
+      targetPort: 7003
