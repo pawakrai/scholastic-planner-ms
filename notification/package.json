@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=dev nodemon src/app.js"
+    "dev": "NODE_ENV=dev nodemon src/app.js",
+    "start": "NODE_ENV=prod node src/app.js"
   },
   "keywords": [],
   "author": "",
