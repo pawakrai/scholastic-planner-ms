@@ -43,9 +43,9 @@ class GraduationPlanService {
 
   // Create a new graduation plan
   async createProfile(data) {
-    const { courseId, studentId } = data
+    const { courseId, studentId, email } = data
 
-    console.log('data', data)
+    // console.log('data', data)
 
     // check if the course exists by student ID
     const profile = await graduationPlanRepository.getByStudentId(studentId)
@@ -61,7 +61,7 @@ class GraduationPlanService {
       data: courseId,
     })
 
-    console.log('courseResponse', courseResponse)
+    // console.log('courseResponse', courseResponse)
 
     if (!courseResponse.data) {
       throw new Error('Course Not found')
@@ -71,6 +71,16 @@ class GraduationPlanService {
     const newProfile = await graduationPlanRepository.create({
       courseId,
       studentId,
+    })
+
+    // send a notification to the notification service
+    RPCRequest('EMAIL_QUEUE', {
+      event: 'SEND_EMAIL',
+      data: {
+        email: email,
+        subject: 'Graduation Plan Created',
+        body: `Your graduation plan for ${courseResponse.data.courseName} has been created successfully`,
+      },
     })
 
     return newProfile

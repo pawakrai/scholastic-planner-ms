@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // Endpoint to get a specific graduation plan by user ID
 app.get('/graduation/profile', UserAuth, (req, res) => {
   const { studentId } = req.user
-  // console.log('req.user', req.user, studentId)
+  // console.log('req.user', req.user, studentId, email)
   client.getProfile({ studentId }, (error, response) => {
     if (error) {
       console.error('Error fetching graduation plan:', error)
@@ -34,9 +34,9 @@ app.get('/graduation/profile', UserAuth, (req, res) => {
 
 // Endpoint to create a new graduation plan
 app.post('/graduation/profile', UserAuth, (req, res) => {
-  const { studentId } = req.user
+  const { studentId, email } = req.user
   const { courseId } = req.body
-  const profileData = { studentId, courseId }
+  const profileData = { studentId, courseId, email }
   client.createProfile(profileData, (error, response) => {
     if (error) {
       console.log('error', error)
