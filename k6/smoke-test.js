@@ -13,7 +13,7 @@ export default function () {
   // กำหนด header ที่ต้องการแนบไปในคำขอ
   const headers = {
     Authorization:
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxMjNAbWFpbC5jb20iLCJfaWQiOiI2NzFkMTZhNzAwNTY1ODUwMTdmN2ZiNjIiLCJzdHVkZW50SWQiOiI2NjcwMjkzODIxIiwiaWF0IjoxNzMwOTc5MzM4LCJleHAiOjE3MzEwNjU3Mzh9.MF4ioDb_FXdGaGujciADJjU-0v8IcpxHaYHIzEzqgnQ', // ใส่ token หรือข้อมูล Authentication
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxMjNAbWFpbC5jb20iLCJfaWQiOiI2NzFkMTZhNzAwNTY1ODUwMTdmN2ZiNjIiLCJzdHVkZW50SWQiOiI2NjcwMjkzODIxIiwiaWF0IjoxNzMxMDcxODE4LCJleHAiOjE3MzExNTgyMTh9.foc2T1ryU5j6TEV3dmE4YIVqfwcUEBifnj6W-oDv4M8', // ใส่ token หรือข้อมูล Authentication
     'Content-Type': 'application/json', // ระบุ Content-Type ของข้อมูล
   }
 
