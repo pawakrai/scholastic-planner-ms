@@ -9,9 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/js-cookie": "3.0.6",
+    "axios": "0.23.0",
+    "jose": "5.9.6",
+    "jotai": "2.10.2",
+    "js-cookie": "3.0.5",
+    "jwt-decode": "3.1.2",
     "next": "15.0.3",
-    "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106"
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-query": "3.27.0",
+    "usehooks-ts": "3.1.0",
+    "zod": "3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",
