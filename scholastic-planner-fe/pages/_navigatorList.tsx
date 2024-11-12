@@ -1,7 +1,24 @@
 import { NavigatorProps } from "@/components/common/Layout/Layout";
-import { BookOpenIcon, AcademicCapIcon } from "@heroicons/react/outline";
+import {
+  BookOpenIcon,
+  AcademicCapIcon,
+  UserIcon,
+} from "@heroicons/react/outline";
 
 export const navigatorList: NavigatorProps[] = [
+  {
+    icon: <UserIcon className="w-5" />,
+    pathName: "profile",
+    slug: "/profile",
+    name: "Profile",
+    subMenu: [
+      {
+        slug: "/view",
+        pathName: "view",
+        name: "View Profile",
+      },
+    ],
+  },
   {
     icon: <BookOpenIcon className="w-5" />,
     pathName: "courses",
@@ -17,6 +34,11 @@ export const navigatorList: NavigatorProps[] = [
         slug: "/search",
         pathName: "search",
         name: "Search Courses",
+      },
+      {
+        slug: "/remove",
+        pathName: "remove",
+        name: "Remove Courses",
       },
     ],
   },
