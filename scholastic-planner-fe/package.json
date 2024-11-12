@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "2.9.11",
+    "@material-tailwind/react": "^2.1.10",
     "@types/js-cookie": "3.0.6",
     "axios": "0.23.0",
+    "classnames": "^2.5.1",
     "jose": "5.9.6",
     "jotai": "2.10.2",
     "js-cookie": "3.0.5",
@@ -18,9 +21,11 @@
     "next": "15.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.53.2",
     "react-query": "3.27.0",
+    "sweetalert2": "^11.14.5",
     "usehooks-ts": "3.1.0",
-    "zod": "3.23.8"
+    "yup": "1.4.0"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -29,7 +34,7 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
-    "postcss": "^8.4.48",
+    "postcss": "^8.4.49",
     "tailwindcss": "^3.4.14",
     "typescript": "^5"
   }

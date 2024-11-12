@@ -1,0 +1,4 @@
+.rootMainButton {
+  @apply text-white text-xs rounded-md py-2 px-3 max-h-8
+  hover:bg-black active:bg-black;
+}
