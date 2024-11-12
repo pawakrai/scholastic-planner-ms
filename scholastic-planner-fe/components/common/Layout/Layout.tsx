@@ -77,10 +77,8 @@ const Layout: FC<Props> = ({ children, pageProps }: Props) => {
         asPath={router.asPath}
       />
       <Topbar navigatorList={subNavigator} currentSubMenu={splitPathUrl[2]} />
-      <main className="ml">
-        <main className="ml-[60px] mr-10 mt-8 pb-8 bg-[#f3f4f6]">
-          {children}
-        </main>
+      <main className="">
+        <main className="ml-[76px] p-8 bg-[#f3f4f6]">{children}</main>
       </main>
     </>
   );
