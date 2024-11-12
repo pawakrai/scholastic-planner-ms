@@ -33,7 +33,6 @@ export const signIn = async (form: ISignIn): Promise<Token> => {
       "/authentication/login",
       form
     );
-
     const { accessToken, refreshToken } = response.data;
     setToken(accessToken, refreshToken);
 

@@ -5,6 +5,7 @@ import { FC, Fragment } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import { UserProvider } from "@/contexts/auth/user-context";
+import { PermissionProvider } from "@/contexts/auth/permission-context";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,15 +23,21 @@ const queryClient = new QueryClient({
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   const Layout = (Component as any).Layout || Fragment;
   const LayoutWrapper: FC<{ pageProps: any; children: any }> = (props) => {
-    return Layout === Fragment ? <>{props.children}</> : <Layout {...props} />;
+    return Layout === Fragment ? (
+      <div>{props.children}</div>
+    ) : (
+      <Layout {...props} />
+    );
   };
 
   return (
     <QueryClientProvider client={queryClient}>
       <UserProvider>
-        {/* <LayoutWrapper pageProps={pageProps}> */}
-        <Component {...pageProps} />
-        {/* </LayoutWrapper> */}
+        <PermissionProvider>
+          <LayoutWrapper pageProps={pageProps}>
+            <Component {...pageProps} />
+          </LayoutWrapper>
+        </PermissionProvider>
       </UserProvider>
     </QueryClientProvider>
   );

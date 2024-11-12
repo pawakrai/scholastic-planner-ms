@@ -43,7 +43,7 @@ export default function Login() {
   useEffect(() => {
     const token = Cookies.get("act");
     if (token) {
-      // router.push("/");
+      router.push("/");
     } else {
       setNeedSignIn(true);
     }
@@ -62,7 +62,7 @@ export default function Login() {
   };
 
   if (!needSignIn) {
-    // return null;
+    return null;
   }
 
   return (
@@ -72,30 +72,30 @@ export default function Login() {
         <form className="" onSubmit={handleSubmit(onSubmit)}>
           <div className="relative">
             <Input
+              nonce={undefined}
+              onResize={undefined}
+              onResizeCapture={undefined}
               label="Username"
               {...register("username")}
-              onPointerEnterCapture={undefined}
-              onPointerLeaveCapture={undefined}
-              crossOrigin={undefined}
             />
           </div>
           <div className="mt-8 relative">
             <Input
+              nonce={undefined}
+              onResize={undefined}
+              onResizeCapture={undefined}
               label="Password"
               type="password"
               {...register("password")}
-              onPointerEnterCapture={undefined}
-              onPointerLeaveCapture={undefined}
-              crossOrigin={undefined}
             />
           </div>
           <div className="mt-6 flex justify-end">
             <Button
               variant="filled"
               type="submit"
-              placeholder={"undefined"}
-              onPointerEnterCapture={undefined}
-              onPointerLeaveCapture={undefined}
+              nonce={undefined}
+              onResize={undefined}
+              onResizeCapture={undefined}
             >
               Sign in
             </Button>

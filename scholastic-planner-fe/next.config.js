@@ -1,6 +1,7 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
 
-const nextConfig: NextConfig = {
+module.exports = {
+  reactStrictMode: true,
   /* config options here */
   publicRuntimeConfig: {
     // Will be available on both server and client
@@ -9,4 +10,3 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
 };
 
-export default nextConfig;
