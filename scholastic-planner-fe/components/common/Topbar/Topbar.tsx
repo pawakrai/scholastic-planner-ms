@@ -30,7 +30,7 @@ const TopbarLinkComponent = React.forwardRef((props: TopbarLinkProps, ref) => {
         >
           {item.name}
           {(!currentSubMenu || pathName.includes(currentSubMenu)) && (
-            <div className="w-full h-[4px] bg-token-purple absolute bottom-0 rounded-topbar"></div>
+            <div className="w-full h-[4px] bg-black absolute bottom-0 rounded-topbar"></div>
           )}
         </div>
       </a>
@@ -68,7 +68,7 @@ export const Topbar: FC<TopbarProps> = (props: TopbarProps) => {
     >
       <div className="col-start-2 flex w-full h-full justify-center">
         <div
-          className={`grid  grid-cols-${navigatorList?.subMenu?.length} gap-5 justify-center text-sm justify-items-center h-full`}
+          className={`grid grid-cols-${navigatorList?.subMenu?.length} gap-5 justify-center text-sm justify-items-center h-full`}
         >
           {navigatorList?.subMenu?.map((item, index) => {
             const pathName = Array.isArray(item.pathName)

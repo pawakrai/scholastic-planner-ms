@@ -9,21 +9,26 @@ export const navigatorList: NavigatorProps[] = [
     name: "Courses management",
     subMenu: [
       {
-        slug: "/",
-        pathName: ["courses-list"],
+        slug: "/management",
+        pathName: "management",
         name: "Courses management",
+      },
+      {
+        slug: "/search",
+        pathName: "search",
+        name: "Search Courses",
       },
     ],
   },
   {
     icon: <AcademicCapIcon className="w-5" />,
-    pathName: "graduation-tracking",
-    slug: "/graduation-tracking",
-    name: "Graduation Tracking",
+    pathName: "graduation",
+    slug: "/graduation",
+    name: "Graduation",
     subMenu: [
       {
-        slug: "/",
-        pathName: ["graduation-tracking"],
+        slug: "/tracking",
+        pathName: "tracking",
         name: "Graduation Tracking",
       },
     ],
