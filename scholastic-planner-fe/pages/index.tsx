@@ -1,4 +1,6 @@
 import Layout from "@/components/common/Layout/Layout";
+import Welcome from "@/public/assets/image/welcome.png";
+import Image from "next/image";
 export async function getStaticProps() {
   return {
     props: {
@@ -8,10 +10,11 @@ export async function getStaticProps() {
 }
 function Home() {
   return (
-    <div
-      className={`grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      Home page
+    <div className={`flex justify-center pt-32`}>
+      <div>
+        <Image src={Welcome} objectFit="contain" height={250} />
+        <div className="mt-6 text-center text-[#4d4d4d]">Welcome</div>
+      </div>
     </div>
   );
 }
