@@ -13,24 +13,24 @@ interface SidebarProps {
 const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
   const { navigatorList, currentPage } = props;
   const { signOut } = useUser();
-
+  console.log("navigatorList, currentPage", navigatorList, currentPage);
   return (
-    <div className="fixed z-40 flex flex-col justify-between items-center py-5 w-[76px] h-full min-h-screen bg-white shadow-xl">
+    <div className="fixed z-40 flex flex-col justify-between items-center py-5 w-[76px] h-full min-h-screen bg-[#100426]">
       <div>{/* <Logo /> */}</div>
       <div className="grid grid-row-5 gap-7 w-full text-white">
         {navigatorList.map((item) => {
           return (
             <Link href={item.slug} key={item.pathName}>
               <div
-                className="flex w-full justify-center items-center relative h-6 text-black cursor-pointer"
+                className="flex w-full justify-center items-center relative h-6 text-white cursor-pointer"
                 key={item.pathName}
               >
                 {item.pathName === currentPage && (
-                  <div className="absolute h-full w-1 bg-token-purple rounded-navbar left-0" />
+                  <div className="absolute h-full w-1 bg-[#b085ff] rounded-navbar left-0" />
                 )}
                 <div
                   className={`${
-                    item.pathName === currentPage ? "text-violet-600" : ""
+                    item.pathName === currentPage ? "text-[#b085ff]" : ""
                   }`}
                 >
                   {item.icon}
@@ -40,7 +40,7 @@ const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
           );
         })}
       </div>
-      <div className="flex w-full justify-center relative h-6 text-black cursor-pointer">
+      <div className="flex w-full justify-center relative h-6 text-white cursor-pointer">
         <div onClick={signOut}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

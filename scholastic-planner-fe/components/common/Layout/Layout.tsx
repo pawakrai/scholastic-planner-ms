@@ -5,7 +5,7 @@ import Sidebar from "@/components/common/Sidebar/Sidebar";
 import AuthenticationCheck from "@/hoc/AuthenticationCheck";
 import { Permission } from "@/utils/permissions";
 import { usePermission } from "@/contexts/auth/permission-context";
-import { UserIcon } from "@heroicons/react/outline";
+import { navigatorList } from "@/pages/_navigatorList";
 
 interface Props {
   children: JSX.Element;
@@ -29,27 +29,6 @@ export interface SubNavigatorProps {
   name: string;
   // permission: Permission[];
 }
-
-const navigatorList: NavigatorProps[] = [
-  {
-    icon: <UserIcon className="w-5" />,
-    pathName: "investor-management",
-    slug: "/investor-management",
-    name: "Investor management",
-    subMenu: [
-      {
-        slug: "/investor-list",
-        pathName: ["investor-list", "update-investor"],
-        name: "Investor management",
-      },
-      {
-        slug: "/draft-investor-list",
-        pathName: ["draft-investor-list", "create"],
-        name: "Draft investor management",
-      },
-    ],
-  },
-];
 
 const Layout: FC<Props> = ({ children, pageProps }: Props) => {
   const { hasPermission } = usePermission();
@@ -85,9 +64,9 @@ const Layout: FC<Props> = ({ children, pageProps }: Props) => {
       router.push(`${navigator[0]?.slug}${navigator[0]?.subMenu[0].slug}`);
     }
 
-    if (!pageProps.mainPage && !hasPermission(...pageProps.permission)) {
-      router.push("/");
-    }
+    // if (!pageProps.mainPage && !hasPermission(...pageProps.permission)) {
+    //   router.push("/");
+    // }
   }, [router, mainNavigate]);
 
   return (

@@ -62,7 +62,7 @@ export const Topbar: FC<TopbarProps> = (props: TopbarProps) => {
   return (
     <div
       className={cn(
-        `h-14	grid grid-cols-3 items-center pl-sidebar h-heightOfTopbar sticky top-0 bg-grey-1 z-30 transition-all duration-150 bg-[#EEEEEE] `,
+        `h-[80px]	grid grid-cols-3 items-center pl-sidebar h-heightOfTopbar sticky top-0 bg-grey-1 z-30 transition-all duration-150 bg-[#EEEEEE] `,
         { "shadow-magical": hasScrolled }
       )}
     >
