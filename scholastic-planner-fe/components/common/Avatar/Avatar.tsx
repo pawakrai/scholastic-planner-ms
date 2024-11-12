@@ -16,13 +16,14 @@ const Avatar: FC = () => {
 
   function getProfile() {
     if (!!getToken()) {
-      // const profile: any = jwtDecode(getToken()!);
+      const profile: any = jwtDecode(getToken()!);
       return {
-        username: "profile?.username",
+        username: profile?.email,
+        id: profile?.studentId,
       };
     }
     return {
-      username: "profile?.username",
+      username: "",
     };
   }
 
@@ -31,6 +32,7 @@ const Avatar: FC = () => {
       <div className="text-sm mr-3 text-right text-[#747474]">
         Welcome,{" "}
         <span className="font-bold text-black">{profile?.username}</span> <br />
+        <span className="font-bold text-black">{profile?.id}</span>
       </div>
       <div>
         <div className="flex justify-center items-center w-10 h-10 bg-[#E5E5E5] rounded-full ">
