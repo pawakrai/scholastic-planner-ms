@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   courses:
     build:
@@ -6,7 +6,7 @@ services:
       context: ./courses
     container_name: courses
     ports:
-      - '7002:7002'
+      - "7002:7002"
     restart: always
 
   graduation-tracking:
@@ -15,7 +15,7 @@ services:
       context: ./graduation-tracking
     container_name: graduation-tracking
     ports:
-      - '7003:7003'
+      - "7003:7003"
     restart: always
 
   user:
@@ -24,14 +24,14 @@ services:
       context: ./user
     container_name: user
     ports:
-      - '7001:7001'
+      - "7001:7001"
     restart: always
 
-  notification:
-    build:
-      dockerfile: Dockerfile
-      context: ./notification
-    container_name: notification
-    ports:
-      - '7004:7004'
-    restart: always
+  # notification:
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./notification
+  #   container_name: notification
+  #   ports:
+  #     - '7004:7004'
+  #   restart: always

@@ -13,7 +13,6 @@ interface SidebarProps {
 const Sidebar: FC<SidebarProps> = (props: SidebarProps) => {
   const { navigatorList, currentPage } = props;
   const { signOut } = useUser();
-  console.log("navigatorList, currentPage", navigatorList, currentPage);
   return (
     <div className="fixed z-40 flex flex-col justify-between items-center py-5 w-[76px] h-full min-h-screen bg-[#100426]">
       <div>{/* <Logo /> */}</div>

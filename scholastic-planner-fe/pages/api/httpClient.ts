@@ -12,6 +12,10 @@ const { publicRuntimeConfig } = getConfig();
 
 export const httpClient = axios.create({
   baseURL: `${publicRuntimeConfig.api}`,
+  headers: {
+    "Content-Type": "application/json;charset=UTF-8",
+    "Access-Control-Allow-Origin": "*",
+  },
   timeout: 180000, // 3 minutes
 });
 

@@ -2,11 +2,13 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import client from '../grpc/client.js'
 import UserAuth from './middlewares/auth.js'
+import cors from 'cors'
 
 const app = express()
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cors())
 
 // Endpoint to get all graduation plans
 // app.get('/', UserAuth, (req, res) => {

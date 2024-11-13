@@ -27,15 +27,14 @@ interface ErrorResponse {
  * @returns The response from the sign-in request.
  * @throws An Axios error with the code and message properties if the request fails.
  */
-export const signIn = async (form: ISignIn): Promise<Token> => {
+export const signIn = async (form: ISignIn): Promise<{id: string, token: string}> => {
   try {
-    const response = await httpClient.post<Token>(
-      "/authentication/login",
-      form
-    );
-    const { accessToken, refreshToken } = response.data;
-    setToken(accessToken, refreshToken);
-
+    const response = await httpClient.post<{id: string, token: string}>("/login", {
+      email: form.username,
+      password: form.password,
+    });
+    const { id, token } = response.data;
+    setToken(token, token);
     return response.data;
   } catch (error) {
     const e = error as AxiosError<{ code: string; message: string }>;
