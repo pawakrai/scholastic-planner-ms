@@ -3,7 +3,7 @@ import { CoursesResponse, getAllCourses } from "@/pages/api/courses";
 import {
   getGraduationProfile,
   GraduationProfileResponse,
-  registerCourse,
+  registerCourseById,
 } from "@/pages/api/graduation";
 import { Button } from "@material-tailwind/react";
 import Link from "next/link";
@@ -52,7 +52,7 @@ function Home() {
   };
 
   const onRegistorCourse = async (id: string) => {
-    await registerCourse(id);
+    await registerCourseById(id);
     router.reload();
   };
 
@@ -181,6 +181,7 @@ function Home() {
               </div>
               <div>
                 <Button
+                  onClick={() => router.push("/courses/search")}
                   nonce={undefined}
                   onResize={undefined}
                   onResizeCapture={undefined}

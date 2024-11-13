@@ -39,11 +39,23 @@ export const getGraduationProfile = async () => {
   return data?.data;
 };
 
-export const registerCourse = async (id: string) => {
+export const registerCourseById = async (id: string) => {
   const data = await httpClient.post(
     "http://localhost:7003/graduation/profile",
     {
       courseId: id,
+    }
+  );
+  return data?.data;
+};
+
+export const registerSubjectById = async (id: string) => {
+  const data = await httpClient.post(
+    "http://localhost:7003/graduation/registerSubject",
+    {
+      subjectId: id,
+      semester: "1",
+      year: "2024",
     }
   );
   return data?.data;
