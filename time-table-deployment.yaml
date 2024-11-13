@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: time-table-deployment
+  labels:
+    app: time-table
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: time-table
+  template:
+    metadata:
+      labels:
+        app: time-table
+    spec:
+      containers:
+        - name: time-table
+          image: scholastic-planner-ms_time-table
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 7005
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: time-table-service
+spec:
+  selector:
+    app: time-table
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 7005
+      targetPort: 7005

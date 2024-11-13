@@ -1,5 +1,12 @@
 version: "3"
 services:
+  rabbitmq:
+    image: rabbitmq:4.0-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # AMQP port for messaging
+      - "15672:15672" # Management UI port
+
   courses:
     build:
       dockerfile: Dockerfile
@@ -8,6 +15,8 @@ services:
     ports:
       - "7002:7002"
     restart: always
+    depends_on:
+      - "rabbitmq"
 
   graduation-tracking:
     build:
@@ -17,6 +26,8 @@ services:
     ports:
       - "7003:7003"
     restart: always
+    depends_on:
+      - "rabbitmq"
 
   user:
     build:
@@ -26,12 +37,25 @@ services:
     ports:
       - "7001:7001"
     restart: always
+    depends_on:
+      - "rabbitmq"
 
-  # notification:
-  #   build:
-  #     dockerfile: Dockerfile
-  #     context: ./notification
-  #   container_name: notification
-  #   ports:
-  #     - '7004:7004'
-  #   restart: always
+  notification:
+    build:
+      dockerfile: Dockerfile
+      context: ./notification
+    container_name: notification
+    ports:
+      - "7004:7004"
+    restart: always
+    depends_on:
+      - "rabbitmq"
+
+  time-table:
+    build:
+      dockerfile: Dockerfile
+      context: ./time-table
+    container_name: time-table
+    ports:
+      - "7005:7005"
+    restart: always

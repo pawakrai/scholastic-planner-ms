@@ -32,7 +32,7 @@ const SubjectSchema = new mongoose.Schema(
       default: true,
     },
     date: {
-      type: [String], // Enum-like behavior with an array of strings for days
+      type: String, // Enum-like behavior with an array of strings for days
       enum: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       required: true,
     },

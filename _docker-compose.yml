@@ -8,11 +8,12 @@ services:
   #   volumes:
   #     - ./db/:/data/db
 
-  # rabbitmq:
-  #   image: rabbitmq:alpine
-  #   container_name: rabbitmq
-  #   ports:
-  #     - '5672:5672'
+  rabbitmq:
+    image: rabbitmq:4.0-management
+    container_name: rabbitmq
+    ports:
+      - '5672:5672' # AMQP port for messaging
+      - '15672:15672' # Management UI port
 
   courses:
     build:
@@ -22,9 +23,9 @@ services:
     ports:
       - '7002:7002'
     restart: always
-    # depends_on:
-    #   - 'nosql-db'
-    #   - 'rabbitmq'
+    depends_on:
+      # - 'nosql-db'
+      - 'rabbitmq'
     # volumes:
     #   - .:/app
     #   - /app/courses/node_modules
@@ -64,3 +65,11 @@ services:
     #   - /app/user/node_modules
     # env_file:
     #   - ./user/.env.dev
+  time-table:
+    build:
+      dockerfile: Dockerfile
+      context: ./time-table
+    container_name: time-table
+    ports:
+      - '7005:7005'
+    restart: always
