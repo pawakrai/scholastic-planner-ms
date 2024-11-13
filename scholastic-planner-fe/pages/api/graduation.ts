@@ -38,3 +38,13 @@ export const getGraduationProfile = async () => {
   );
   return data?.data;
 };
+
+export const registerCourse = async (id: string) => {
+  const data = await httpClient.post(
+    "http://localhost:7003/graduation/profile",
+    {
+      courseId: id,
+    }
+  );
+  return data?.data;
+};

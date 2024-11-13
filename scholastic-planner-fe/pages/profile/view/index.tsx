@@ -1,19 +1,29 @@
 import Layout from "@/components/common/Layout/Layout";
+import { CoursesResponse, getAllCourses } from "@/pages/api/courses";
 import {
   getGraduationProfile,
   GraduationProfileResponse,
+  registerCourse,
 } from "@/pages/api/graduation";
+import { Button } from "@material-tailwind/react";
 import Link from "next/link";
-import { Router } from "next/router";
+import { Router, useRouter } from "next/router";
 import { useEffect, useState } from "react";
 function Home() {
-  const [isEmptyProfile, setIsEmptyProfile] = useState<boolean>();
   const [profile, setProfile] = useState<GraduationProfileResponse>();
+  const [coursesList, setCoursesList] = useState<CoursesResponse[]>();
+  const router = useRouter();
+
   useEffect(() => {
     const getProfile = async () => {
       const profile = await getGraduationProfile();
-      console.log("profile", profile);
-      setProfile(profile);
+      if (profile.courseName) {
+        console.log("profile", profile);
+        setProfile(profile);
+      } else {
+        const courses = await getAllCourses();
+        setCoursesList(courses);
+      }
     };
     getProfile();
   }, []);
@@ -41,9 +51,11 @@ function Home() {
     }
   };
 
-  const onClickAddSubjects = () => {
-    Router;
+  const onRegistorCourse = async (id: string) => {
+    await registerCourse(id);
+    router.reload();
   };
+
   return (
     <div>
       {profile ? (
@@ -120,50 +132,113 @@ function Home() {
             </div>
           </div>
           <div className="my-10 bg-gray-400	h-[1px] w-full" />
-          {profile.academicRecords.map((academic) => (
-            <div className="p-5 flex flex-col flex-1 bg-white rounded-xl shadow-lg">
-              <div className="flex mb-5 justify-between">
-                <div>
-                  ปีการศึกษา {academic.year}/{academic.semester}
-                </div>
-                <Link href={"/courses/search"}>
-                  <div className="cursor-pointer font-bold">
-                    ลงทะเบียนเรียน {">"}
+          {profile.academicRecords.length > 0 ? (
+            profile.academicRecords.map((academic) => (
+              <div className="p-5 flex flex-col flex-1 bg-white rounded-xl shadow-lg">
+                <div className="flex mb-5 justify-between">
+                  <div>
+                    ปีการศึกษา {academic.year}/{academic.semester}
                   </div>
-                </Link>
-              </div>
-              <div className="flex flex-row gap-5 overflow-x-auto">
-                {academic.subjects.length > 0 ? (
-                  academic.subjects.map((subject) => (
-                    <div className="flex items-center flex-col p-5 bg-gray-100 rounded-xl">
-                      <div className="mb-5 w-[100px] h-[100px] bg-[#E5E5E5] rounded-full"></div>
-                      <div>
-                        <p className="font-bold">{subject.name}</p>
-                        <p>
-                          หน่วยกิต{" "}
-                          <p className="font-bold inline-block">
-                            {subject.credits}
-                          </p>{" "}
-                          หน่วยกิต
-                        </p>
-                        <p>
-                          ผลการศึกษา{" "}
-                          <p className="font-bold inline-block">
-                            {gradeToText(subject.grade)}
-                          </p>{" "}
-                        </p>
-                      </div>
+                  <Link href={"/courses/search"}>
+                    <div className="cursor-pointer font-bold">
+                      ลงทะเบียนเรียน {">"}
                     </div>
-                  ))
-                ) : (
-                  <div>{"ยังไม่ได้ลงทะเบียนเรียน"}</div>
-                )}
+                  </Link>
+                </div>
+                <div className="flex flex-row gap-5 overflow-x-auto">
+                  {academic.subjects.length > 0 ? (
+                    academic.subjects.map((subject) => (
+                      <div className="flex items-center flex-col p-5 bg-gray-100 rounded-xl">
+                        <div className="mb-5 w-[100px] h-[100px] bg-[#E5E5E5] rounded-full"></div>
+                        <div>
+                          <p className="font-bold">{subject.name}</p>
+                          <p>
+                            หน่วยกิต{" "}
+                            <p className="font-bold inline-block">
+                              {subject.credits}
+                            </p>{" "}
+                            หน่วยกิต
+                          </p>
+                          <p>
+                            ผลการศึกษา{" "}
+                            <p className="font-bold inline-block">
+                              {gradeToText(subject.grade)}
+                            </p>{" "}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div>{"ไม่พบรายวิชา"}</div>
+                  )}
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="p-5 items-center flex flex-row flex-1 bg-white rounded-xl shadow-lg">
+              <div className="font-bold flex flex-1">
+                {"ยังไม่ได้ลงทะเบียนเรียน"}
+              </div>
+              <div>
+                <Button
+                  nonce={undefined}
+                  onResize={undefined}
+                  onResizeCapture={undefined}
+                >
+                  <div>ค้นหารายวิชา</div>
+                </Button>
               </div>
             </div>
-          ))}
+          )}
         </div>
       ) : (
-        <div>{/* TODO: ยังไม่ได้เลือก plan */}</div>
+        <div>
+          <div className="mb-5">กรุณาเลือกหลักสุตร</div>
+          <div className="flex flex-col gap-5">
+            {coursesList?.map((course) => (
+              <div className="p-5 divide-y divide-gray-400 flex flex-col flex-1 bg-white rounded-xl shadow-lg">
+                <div className="py-5 pt-0 flex flex-row">
+                  <div className="flex flex-1 flex-col">
+                    <div className="font-bold">{course.courseName}</div>
+                    <div className="">{course.courseDescription}</div>
+                  </div>
+                  <div>
+                    <Button
+                      onClick={() => onRegistorCourse(course._id)}
+                      nonce={undefined}
+                      onResize={undefined}
+                      onResizeCapture={undefined}
+                    >
+                      <div>ลงทะเบียนหลักสูตร</div>
+                    </Button>
+                  </div>
+                </div>
+                <div className="py-5 pb-0">
+                  <div className="font-bold">เงื่อนไขการจบหลักสูตร</div>
+                  <div>
+                    หน่วยกิตขั้นต่ำ{" "}
+                    <div className="inline-block font-bold">
+                      {course.graduationRequirements.minimumCredits}
+                    </div>
+                  </div>
+                  <div>
+                    เกรดเฉลี่ยขั้นต่ำ{" "}
+                    <div className="inline-block font-bold">
+                      {course.graduationRequirements.minimumGPA}
+                    </div>
+                  </div>
+                  <div>
+                    ระยะเวลา{" "}
+                    <div className="inline-block font-bold">
+                      {course.graduationRequirements.maximumDuration}
+                    </div>{" "}
+                    ปี
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );
