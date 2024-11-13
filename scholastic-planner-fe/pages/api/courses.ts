@@ -33,7 +33,7 @@ export interface SubjectResponse {
   semester: number
   year: number
   isOpen: boolean
-  date: string[]
+  date: string
   startTime: string
   endTime: string
   sec: number

@@ -68,7 +68,7 @@ function Home() {
                         <div>
                           วัน{" "}
                           <div className="font-bold inline-block">
-                            {subject.date.map((date) => `${mapDate(date)} `)}
+                            {mapDate(subject?.date)}
                           </div>
                         </div>
                         <div>
@@ -124,7 +124,7 @@ function Home() {
                         <div>
                           วัน{" "}
                           <div className="font-bold inline-block">
-                            {subject.date.map((date) => `${mapDate(date)} `)}
+                            {mapDate(subject.date)}
                           </div>
                         </div>
                         <div>
