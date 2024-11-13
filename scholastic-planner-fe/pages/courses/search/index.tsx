@@ -1,12 +1,22 @@
 import Layout from "@/components/common/Layout/Layout";
 import { getAllSubject, SubjectResponse } from "@/pages/api/courses";
 import { registerSubjectById } from "@/pages/api/graduation";
-import { Button } from "@material-tailwind/react";
+import { mapDate } from "@/utils/utils";
+import { Button, Input } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 function Home() {
+  const [filterSubject, setFilterSubject] = useState<string>("");
   const [subjects, setSubjects] = useState<SubjectResponse[]>();
-  const openSubjects = subjects?.filter((subject) => subject.isOpen) ?? [];
-  const notOpenSubjects = subjects?.filter((subject) => !subject.isOpen) ?? [];
+  const filterSub =
+    filterSubject.length >= 3
+      ? subjects?.filter(
+          (subject) =>
+            subject.subjectId.toLocaleUpperCase().indexOf(filterSubject) > -1 ||
+            subject.subjectName.toLocaleUpperCase().indexOf(filterSubject) > -1
+        ) ?? []
+      : subjects;
+  const openSubjects = filterSub?.filter((subject) => subject.isOpen) ?? [];
+  const notOpenSubjects = filterSub?.filter((subject) => !subject.isOpen) ?? [];
 
   useEffect(() => {
     const getCourse = async () => {
@@ -21,37 +31,32 @@ function Home() {
     window.alert("ลงทะเบียนเรียนสำเร็จ");
   };
 
-  const mapDate = (date: string) => {
-    switch (date) {
-      case "Mon":
-        return "จันทร์";
-      case "Tue":
-        return "อังคาร";
-      case "Wed":
-        return "พุธ";
-      case "Thu":
-        return "พฤหัสบดี";
-      case "Fri":
-        return "ศุกร์";
-      default:
-        return date;
-    }
-  };
-
   return (
     <div>
-      ค้นหารายวิชา
+      <div className="flex flex-row gap-5 items-center">
+        ค้นหารายวิชา
+        <div className="w-[200px]">
+          <Input
+            label="ค้นหาด้วยชื่อ หรือ รหัสวิชา"
+            onChange={(e) =>
+              setFilterSubject(e.target.value.toLocaleUpperCase())
+            }
+          />
+        </div>
+      </div>
       <div>
         {subjects?.length ?? 0 > 0 ? (
           <div>
-            <div className="font-bold my-4 text-2xl">วิชาที่เปิดสอน</div>
+            <div>
+              <div className="font-bold my-4 text-2xl">วิชาที่เปิดสอน</div>
+            </div>
             <div>
               {openSubjects.length > 0 ? (
                 openSubjects.map((subject) => (
                   <div className="p-5 flex flex-col flex-1 bg-white rounded-xl shadow-lg mb-5">
                     <div className="flex flex-row flex-1 ">
                       <div className="font-bold flex flex-1">
-                        {subject.subjectName}
+                        {subject.subjectId} {subject.subjectName}
                       </div>
                     </div>
                     <div>{subject.subjectDescription}</div>

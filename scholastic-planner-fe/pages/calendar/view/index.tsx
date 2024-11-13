@@ -1,13 +1,28 @@
-import { Select, Option, Button } from "@material-tailwind/react";
+import {
+  Select,
+  Option,
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 import Layout from "@/components/common/Layout/Layout";
 import { getToken } from "@/pages/api/httpClient";
 import { getTimeTableById, TimeTableResponse } from "@/pages/api/timetable";
 import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
+import { getAllSubject, SubjectResponse } from "@/pages/api/courses";
+import { mapDate } from "@/utils/utils";
 
 function Home() {
+  const [open, setOpen] = useState(false);
   const [semester, setSemester] = useState<string>();
   const [year, setYear] = useState<string>();
+  const [subjects, setSubjects] = useState<SubjectResponse[]>([]);
+  const [timeTableSubjects, setTimeTableSubjects] = useState<SubjectResponse[]>(
+    []
+  );
   const [timeTable, setTimeTable] = useState<TimeTableResponse>();
   const [isEmptyTimeTable, setIsEmptyTimeTable] = useState<boolean>();
 
@@ -30,7 +45,14 @@ function Home() {
         }
       }
     };
-    getTimeTable();
+    const getSubjects = async () => {
+      const subjectsResponse = await getAllSubject();
+      setSubjects(subjectsResponse);
+    };
+    if (semester && year) {
+      getSubjects();
+      getTimeTable();
+    }
   }, [semester, year]);
 
   const TABLE_HEAD = [
@@ -49,37 +71,112 @@ function Home() {
   const TABLE_ROWS = [
     {
       day: "วันจันทร์",
-      subjects: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      subjects: timeTableSubjects.filter((sub) => sub.date === "Mon"),
     },
     {
       day: "วันอังคาร",
-      subjects: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      subjects: timeTableSubjects.filter((sub) => sub.date === "Tue"),
     },
     {
       day: "วันพุธ",
-      subjects: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      subjects: timeTableSubjects.filter((sub) => sub.date === "Wed"),
     },
     {
       day: "วันพฤหัสบดี",
-      subjects: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      subjects: timeTableSubjects.filter((sub) => sub.date === "Thu"),
     },
     {
       day: "วันศุกร์",
-      subjects: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      subjects: timeTableSubjects.filter((sub) => sub.date === "Fri"),
     },
     {
       day: "วันเสาร์",
-      subjects: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      subjects: timeTableSubjects.filter((sub) => sub.date === "Sat"),
     },
     {
       day: "วันอาทิตย์",
-      subjects: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+      subjects: timeTableSubjects.filter((sub) => sub.date === "Sun"),
     },
   ];
+
+  const onSelectSubject = (subject: SubjectResponse) => {
+    setTimeTableSubjects([...timeTableSubjects, subject]);
+    handleOpen();
+  };
+
+  const handleOpen = () => setOpen(!open);
+
+  const SubjectDialog = () => {
+    return (
+      <Dialog open={open} handler={handleOpen}>
+        <DialogHeader>
+          <div>
+            เลือกรายวิชาปีการศึกษา {year} เทอม {semester}
+          </div>
+        </DialogHeader>
+        {/* <DialogBody> */}
+        <div className="overflow-auto h-[400px] px-2 text-black">
+          {subjects && subjects.length > 0 ? (
+            subjects.map((subject) => (
+              <div className="p-5 flex flex-col flex-1 bg-white rounded-xl shadow-lg mb-5">
+                <div className="flex flex-row flex-1 ">
+                  <div className="font-bold flex flex-1">
+                    {subject.subjectName}
+                  </div>
+                </div>
+                <div className="my-5 bg-gray-400	h-[1px] w-full" />
+                <div className="">
+                  <div>
+                    หน่วยกิต{" "}
+                    <div className="font-bold inline-block">
+                      {subject.credits}
+                    </div>{" "}
+                    หน่วยกิต
+                  </div>
+                  <div className="flex flex-col">
+                    <div>
+                      วัน{" "}
+                      <div className="font-bold inline-block">
+                        {mapDate(subject?.date)}
+                      </div>
+                    </div>
+                    <div>
+                      เวลา{" "}
+                      <div className="font-bold inline-block">
+                        {subject.startTime} - {subject.endTime}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="my-5 bg-gray-400	h-[1px] w-full" />
+                <div className="flex items-center flex-row flex-1 ">
+                  <div className="flex flex-1"></div>
+                  <Button onClick={() => onSelectSubject(subject)}>
+                    <div>เพิ่มวิชาเรียนลงตารางเรียน</div>
+                  </Button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="font-bold flex-1 text-center mx-10 text-gray-500">
+              ไม่มีรายวิชา
+            </div>
+          )}
+        </div>
+        {/* </DialogBody> */}
+        <DialogFooter>
+          <Button onClick={handleOpen}>
+            <div>ยกเลิก</div>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+    );
+  };
 
   return (
     <div>
       <div>
+        <SubjectDialog />
         <div className={"font-bold my-4 text-2xl"}>จำลองตารางเรียน</div>
         <div className="flex flex-row gap-5">
           <div className={"w-[200px]"}>
@@ -133,7 +230,9 @@ function Home() {
                       </td>
                       {day.subjects.map((subject) => (
                         <td className={classes}>
-                          <div className="font-normal">{""}</div>
+                          <div className="font-normal">
+                            {subject.subjectName}
+                          </div>
                         </td>
                       ))}
                     </tr>
@@ -143,7 +242,7 @@ function Home() {
             </table>
             <div className="my-5 bg-gray-400 h-[1px] w-full" />
             <div className="flex justify-end gap-5">
-              <Button variant="outlined">
+              <Button variant="outlined" onClick={handleOpen}>
                 <div>เพิ่มวิชาเรียน</div>
               </Button>
               <Button>
