@@ -1,0 +1,20 @@
+{
+  "studentId": "6670293821",
+  "semester": "2",
+  "year": 2024,
+  "subjects": [
+    {
+      "_id": "672dea3ccd61799d1a763c50",
+      "subjectId": "2110524",
+      "subjectName": "DATA STRUCTURES AND ALGORITHMS",
+      "credits": 3,
+      "semester": 2,
+      "year": 2024,
+      "isOpen": true,
+      "date": ["Mon", "Wed", "Fri"],
+      "startTime": "10:00",
+      "endTime": "11:30",
+      "sec": 2
+    }
+  ]
+}
