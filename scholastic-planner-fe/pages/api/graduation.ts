@@ -60,3 +60,18 @@ export const registerSubjectById = async (id: string) => {
   );
   return data?.data;
 };
+
+export const updateSubjectById = async (id: string, grade: number) => {
+  const data = await httpClient.post(
+    "http://localhost:7003/graduation/updateSubject",
+    {
+      subjectId: id,
+      grade: grade,
+      semester: "1",
+      year: "2024",
+    }
+  );
+  return data?.data;
+};
+
+

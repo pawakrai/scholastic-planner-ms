@@ -1,10 +1,5 @@
 import { NavigatorProps } from "@/components/common/Layout/Layout";
-import {
-  BookOpenIcon,
-  AcademicCapIcon,
-  CalendarIcon,
-  UserIcon,
-} from "@heroicons/react/outline";
+import { BookOpenIcon, CalendarIcon, UserIcon } from "@heroicons/react/outline";
 
 export const navigatorList: NavigatorProps[] = [
   {

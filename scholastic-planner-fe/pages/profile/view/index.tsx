@@ -1,14 +1,18 @@
 import Layout from "@/components/common/Layout/Layout";
 import { CoursesResponse, getAllCourses } from "@/pages/api/courses";
 import {
+  AcademicRecord,
   getGraduationProfile,
   GraduationProfileResponse,
   registerCourseById,
+  Subject,
+  updateSubjectById,
 } from "@/pages/api/graduation";
-import { Button } from "@material-tailwind/react";
+import { Button, Option, Select } from "@material-tailwind/react";
 import Link from "next/link";
 import { Router, useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { PencilIcon, CheckIcon } from "@heroicons/react/outline";
 function Home() {
   const [profile, setProfile] = useState<GraduationProfileResponse>();
   const [coursesList, setCoursesList] = useState<CoursesResponse[]>();
@@ -18,7 +22,6 @@ function Home() {
     const getProfile = async () => {
       const profile = await getGraduationProfile();
       if (profile.courseName) {
-        console.log("profile", profile);
         setProfile(profile);
       } else {
         const courses = await getAllCourses();
@@ -28,23 +31,23 @@ function Home() {
     getProfile();
   }, []);
 
-  const gradeToText = (grade: number) => {
+  const gradeToText = (grade: string) => {
     switch (grade) {
-      case 0:
+      case "0":
         return "F";
-      case 1:
+      case "1":
         return "D";
-      case 1.5:
+      case "1.5":
         return "D+";
-      case 2:
+      case "2":
         return "C";
-      case 2.5:
+      case "2.5":
         return "C+";
-      case 3:
+      case "3":
         return "B";
-      case 3.5:
+      case "3.5":
         return "B+";
-      case 4:
+      case "4":
         return "A";
       default:
         return "-";
@@ -54,6 +57,84 @@ function Home() {
   const onRegistorCourse = async (id: string) => {
     await registerCourseById(id);
     router.reload();
+  };
+
+  const SubjectsComponent = (props: { subject: Subject }) => {
+    const subject = props.subject;
+    const [isEdit, setIsEdit] = useState<boolean>(false);
+    const [grade, setGrade] = useState<string>(`${subject.grade}`);
+
+    const onSubmitGradeSubject = async () => {
+      setIsEdit(false);
+      await updateSubjectById(subject.id, Number(grade));
+    };
+
+    return (
+      <div className="flex items-center flex-col p-5 bg-gray-100 rounded-xl">
+        <div className="mb-5 w-[100px] h-[100px] bg-[#E5E5E5] rounded-full"></div>
+        <div>
+          <p className="font-bold">{subject.name}</p>
+          <p>
+            หน่วยกิต <p className="font-bold inline-block">{subject.credits}</p>{" "}
+            หน่วยกิต
+          </p>
+          <div className="flex flex-row gap-2 items-center">
+            ผลการศึกษา
+            {!isEdit ? (
+              <p className="font-bold inline-block">{gradeToText(grade)}</p>
+            ) : (
+              <div className={"w-[80px]"}>
+                <div className="relative">
+                  <select
+                    onChange={(e) => setGrade(e.target.value)}
+                    value={grade}
+                    className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded pl-3 pr-8 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md appearance-none cursor-pointer"
+                  >
+                    <option value="4">A</option>
+                    <option value="3.5">B+</option>
+                    <option value="3">B</option>
+                    <option value="2.5">C</option>
+                    <option value="2">C</option>
+                    <option value="1.5">D+</option>
+                    <option value="1">D</option>
+                    <option value="-1">-</option>
+                  </select>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.2"
+                    stroke="currentColor"
+                    className="h-5 w-5 ml-1 absolute top-2.5 right-2.5 text-slate-700"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
+                    />
+                  </svg>
+                </div>
+              </div>
+            )}
+            {!isEdit ? (
+              <div
+                className="py-x cursor-pointer"
+                onClick={() => setIsEdit(true)}
+              >
+                <PencilIcon className="w-4 text-gray-400" />
+              </div>
+            ) : (
+              <div
+                className="py-x cursor-pointer"
+                onClick={onSubmitGradeSubject}
+              >
+                <CheckIcon className="w-4 text-gray-600" />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -148,25 +229,7 @@ function Home() {
                 <div className="flex flex-row gap-5 overflow-x-auto">
                   {academic.subjects.length > 0 ? (
                     academic.subjects.map((subject) => (
-                      <div className="flex items-center flex-col p-5 bg-gray-100 rounded-xl">
-                        <div className="mb-5 w-[100px] h-[100px] bg-[#E5E5E5] rounded-full"></div>
-                        <div>
-                          <p className="font-bold">{subject.name}</p>
-                          <p>
-                            หน่วยกิต{" "}
-                            <p className="font-bold inline-block">
-                              {subject.credits}
-                            </p>{" "}
-                            หน่วยกิต
-                          </p>
-                          <p>
-                            ผลการศึกษา{" "}
-                            <p className="font-bold inline-block">
-                              {gradeToText(subject.grade)}
-                            </p>{" "}
-                          </p>
-                        </div>
-                      </div>
+                      <SubjectsComponent subject={subject} />
                     ))
                   ) : (
                     <div>{"ไม่พบรายวิชา"}</div>

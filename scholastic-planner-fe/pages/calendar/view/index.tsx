@@ -14,6 +14,9 @@ import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
 import { getAllSubject, SubjectResponse } from "@/pages/api/courses";
 import { mapDate } from "@/utils/utils";
+import dayjs from "dayjs";
+var customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
 
 function Home() {
   const [open, setOpen] = useState(false);
@@ -68,34 +71,46 @@ function Home() {
     "14-15",
     "15-16",
   ];
+  const getTimeRowByDay = (day: string) => {
+    return timeTableSubjects
+      .filter((sub) => sub.date === day)
+      .sort((a, b) => b.startTime.localeCompare(a.startTime))
+      .map((sub) => ({
+        subject: sub,
+        time: dayjs(sub.endTime, "HH:mm").diff(
+          dayjs(sub.startTime, "HH:mm"),
+          "hour"
+        ),
+      }));
+  };
   const TABLE_ROWS = [
     {
       day: "วันจันทร์",
-      subjects: timeTableSubjects.filter((sub) => sub.date === "Mon"),
+      subjects: getTimeRowByDay("Mon"),
     },
     {
       day: "วันอังคาร",
-      subjects: timeTableSubjects.filter((sub) => sub.date === "Tue"),
+      subjects: getTimeRowByDay("Tue"),
     },
     {
       day: "วันพุธ",
-      subjects: timeTableSubjects.filter((sub) => sub.date === "Wed"),
+      subjects: getTimeRowByDay("Wed"),
     },
     {
       day: "วันพฤหัสบดี",
-      subjects: timeTableSubjects.filter((sub) => sub.date === "Thu"),
+      subjects: getTimeRowByDay("Thu"),
     },
     {
       day: "วันศุกร์",
-      subjects: timeTableSubjects.filter((sub) => sub.date === "Fri"),
+      subjects: getTimeRowByDay("Fri"),
     },
     {
       day: "วันเสาร์",
-      subjects: timeTableSubjects.filter((sub) => sub.date === "Sat"),
+      subjects: getTimeRowByDay("Sat"),
     },
     {
       day: "วันอาทิตย์",
-      subjects: timeTableSubjects.filter((sub) => sub.date === "Sun"),
+      subjects: getTimeRowByDay("Sun"),
     },
   ];
 
@@ -210,7 +225,7 @@ function Home() {
                   {TABLE_HEAD.map((head) => (
                     <th
                       key={head}
-                      className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                      className="border border-blue-gray-200 bg-blue-gray-50 p-4"
                     >
                       <div className="font-bold text-center">{head}</div>
                     </th>
@@ -220,18 +235,23 @@ function Home() {
               <tbody>
                 {TABLE_ROWS.map((day, index) => {
                   const isLast = index === TABLE_ROWS.length - 1;
-                  const classes = isLast
-                    ? "p-4"
-                    : "p-4 border-b border-blue-gray-50";
+                  const classes = "p-4 border border-blue-gray-200";
                   return (
                     <tr key={day.day}>
                       <td className={classes}>
                         <div className="font-normal">{day.day}</div>
                       </td>
                       {day.subjects.map((subject) => (
-                        <td className={classes}>
-                          <div className="font-normal">
-                            {subject.subjectName}
+                        <td
+                          className={`${classes} bg-blue-100`}
+                          colSpan={subject.time}
+                        >
+                          <div className="font-normal text-center ">
+                            {subject.subject.subjectName}
+                          </div>
+                          <div className="font-normal text-center ">
+                            {subject.subject.startTime}-
+                            {subject.subject.endTime}
                           </div>
                         </td>
                       ))}
