@@ -166,7 +166,7 @@ function Home() {
         <div className="overflow-auto h-[400px] px-2 text-black">
           {subjects && subjects.length > 0 ? (
             subjects.map((subject) => (
-              <div className="p-5 flex flex-col flex-1 bg-white rounded-xl shadow-lg mb-5">
+              <div className="p-5 flex flex-col flex-1 bg-white rounded-xl border border-gray-400	 mb-5">
                 <div className="flex flex-row flex-1 ">
                   <div className="font-bold flex flex-1">
                     {subject.subjectName}
