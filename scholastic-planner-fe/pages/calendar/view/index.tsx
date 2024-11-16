@@ -9,40 +9,45 @@ import {
 } from "@material-tailwind/react";
 import Layout from "@/components/common/Layout/Layout";
 import { getToken } from "@/pages/api/httpClient";
-import { getTimeTableById, TimeTableResponse } from "@/pages/api/timetable";
+import {
+  createTimeTable,
+  getTimeTableById,
+  updateTimeTable,
+} from "@/pages/api/timetable";
 import jwtDecode from "jwt-decode";
 import { useEffect, useState } from "react";
 import { getAllSubject, SubjectResponse } from "@/pages/api/courses";
 import { mapDate } from "@/utils/utils";
+import { XIcon } from "@heroicons/react/outline";
+
 import dayjs from "dayjs";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 
 function Home() {
   const [open, setOpen] = useState(false);
-  const [semester, setSemester] = useState<string>();
-  const [year, setYear] = useState<string>();
+  const [semester, setSemester] = useState<string>("");
+  const [year, setYear] = useState<string>("");
   const [subjects, setSubjects] = useState<SubjectResponse[]>([]);
   const [timeTableSubjects, setTimeTableSubjects] = useState<SubjectResponse[]>(
     []
   );
-  const [timeTable, setTimeTable] = useState<TimeTableResponse>();
   const [isEmptyTimeTable, setIsEmptyTimeTable] = useState<boolean>();
+  const getStudentId = () => {
+    if (!!getToken()) {
+      const profile: any = jwtDecode(getToken()!);
+      return profile?.studentId;
+    }
+    return "";
+  };
 
   useEffect(() => {
-    const getStudentId = () => {
-      if (!!getToken()) {
-        const profile: any = jwtDecode(getToken()!);
-        return profile?.studentId;
-      }
-      return "";
-    };
     const getTimeTable = async () => {
       const studentId = getStudentId();
       if (studentId && semester && year) {
         const table = await getTimeTableById(studentId, semester, year);
         if (table.subjects?.length > 0) {
-          setTimeTable(table);
+          setTimeTableSubjects(table.subjects);
         } else {
           setIsEmptyTimeTable(true);
         }
@@ -58,6 +63,31 @@ function Home() {
     }
   }, [semester, year]);
 
+  const getTimeRowByDay = (day: string): Record<string, any>[] => {
+    const mapIndex = (
+      sub: SubjectResponse
+    ): { index: number; diff: number } => {
+      const start = dayjs(sub.startTime, "HH:mm");
+      const end = dayjs(sub.endTime, "HH:mm");
+      return { index: start.get("hour") - 7, diff: end.diff(start, "hour") };
+    };
+    const mainArray: Record<string, any>[] = Array(9).fill({});
+    const timeArray = timeTableSubjects
+      .filter((sub) => sub.date === day)
+      .sort((a, b) => b.startTime.localeCompare(a.startTime))
+      .map((sub) => ({
+        subject: sub,
+        time: mapIndex(sub),
+      }));
+
+    return timeArray.reduce((acc, t) => {
+      const { index, diff } = t.time;
+      const before = acc.slice(0, index);
+      const after = acc.slice(index + diff);
+      return [...before, t, ...after];
+    }, mainArray);
+  };
+
   const TABLE_HEAD = [
     "วัน / เวลา",
     "7-8",
@@ -67,22 +97,10 @@ function Home() {
     "11-12",
     "12-13",
     "13-14",
-    "13-14",
     "14-15",
     "15-16",
   ];
-  const getTimeRowByDay = (day: string) => {
-    return timeTableSubjects
-      .filter((sub) => sub.date === day)
-      .sort((a, b) => b.startTime.localeCompare(a.startTime))
-      .map((sub) => ({
-        subject: sub,
-        time: dayjs(sub.endTime, "HH:mm").diff(
-          dayjs(sub.startTime, "HH:mm"),
-          "hour"
-        ),
-      }));
-  };
+
   const TABLE_ROWS = [
     {
       day: "วันจันทร์",
@@ -117,6 +135,21 @@ function Home() {
   const onSelectSubject = (subject: SubjectResponse) => {
     setTimeTableSubjects([...timeTableSubjects, subject]);
     handleOpen();
+  };
+
+  const handleRemove = (subject: SubjectResponse) => {
+    const updateTime = timeTableSubjects.filter(
+      (time) => time._id !== subject._id
+    );
+    setTimeTableSubjects([...updateTime]);
+  };
+
+  const handleSave = async () => {
+    if (isEmptyTimeTable) {
+      await createTimeTable(getStudentId(), semester, year, timeTableSubjects);
+    } else {
+      await updateTimeTable(getStudentId(), semester, year, timeTableSubjects);
+    }
   };
 
   const handleOpen = () => setOpen(!open);
@@ -234,24 +267,39 @@ function Home() {
               </thead>
               <tbody>
                 {TABLE_ROWS.map((day, index) => {
-                  const isLast = index === TABLE_ROWS.length - 1;
-                  const classes = "p-4 border border-blue-gray-200";
+                  const classes = "p-5 border border-blue-gray-200";
                   return (
-                    <tr key={day.day}>
+                    <tr key={`${day.day}-${index}`}>
                       <td className={classes}>
                         <div className="font-normal">{day.day}</div>
                       </td>
                       {day.subjects.map((subject) => (
                         <td
-                          className={`${classes} bg-blue-100`}
-                          colSpan={subject.time}
+                          className={`${classes} ${
+                            subject.subject && "bg-blue-100"
+                          }`}
+                          colSpan={subject?.time?.diff}
                         >
-                          <div className="font-normal text-center ">
-                            {subject.subject.subjectName}
-                          </div>
-                          <div className="font-normal text-center ">
-                            {subject.subject.startTime}-
-                            {subject.subject.endTime}
+                          <div className="flex flex-row items-center gap-5">
+                            {subject.subject && (
+                              <>
+                                <div className="flex-1">
+                                  <div className="font-normal text-center ">
+                                    {subject.subject.subjectName}
+                                  </div>
+                                  <div className="font-normal text-center ">
+                                    {subject.subject.startTime}-
+                                    {subject.subject.endTime}
+                                  </div>
+                                </div>
+                                <div
+                                  className="cursor-pointer"
+                                  onClick={() => handleRemove(subject.subject)}
+                                >
+                                  <XIcon className="w-5" />
+                                </div>
+                              </>
+                            )}
                           </div>
                         </td>
                       ))}
@@ -265,7 +313,7 @@ function Home() {
               <Button variant="outlined" onClick={handleOpen}>
                 <div>เพิ่มวิชาเรียน</div>
               </Button>
-              <Button>
+              <Button onClick={handleSave}>
                 <div>บันทึก</div>
               </Button>
             </div>

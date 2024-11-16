@@ -219,7 +219,16 @@ function Home() {
               <div className="p-5 flex flex-col flex-1 bg-white rounded-xl shadow-lg">
                 <div className="flex mb-5 justify-between">
                   <div>
-                    ปีการศึกษา {academic.year}/{academic.semester}
+                    ปีการศึกษา{" "}
+                    <div className="font-bold inline-block">
+                      {academic.year}/{academic.semester}
+                    </div>
+                    <div>
+                      เกดรเฉลี่ย{" "}
+                      <div className="font-bold inline-block">
+                        {academic.gpa}
+                      </div>
+                    </div>
                   </div>
                   <Link href={"/courses/search"}>
                     <div className="cursor-pointer font-bold">
