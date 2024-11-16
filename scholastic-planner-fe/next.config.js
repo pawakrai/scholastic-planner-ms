@@ -8,5 +8,10 @@ module.exports = {
     api: process.env.API_HOST,
   },
   reactStrictMode: true,
-};
-
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+}

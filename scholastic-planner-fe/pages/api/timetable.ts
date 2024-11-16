@@ -1,11 +1,11 @@
-import { SubjectResponse } from "./courses";
-import { httpClient } from "./httpClient";
+import { SubjectResponse } from './courses'
+import { httpClient } from './httpClient'
 
 export interface TimeTableResponse {
-  studentid: string;
-  semester: string;
-  year: number;
-  subjects: SubjectResponse[];
+  studentid: string
+  semester: string
+  year: number
+  subjects: SubjectResponse[]
 }
 
 export const getTimeTableById = async (
@@ -14,10 +14,10 @@ export const getTimeTableById = async (
   year: string
 ) => {
   const data = await httpClient.get<TimeTableResponse>(
-    `http://localhost:7005/api/timeTable/${id}/${semester}/${year}`
-  );
-  return data?.data;
-};
+    `/api/timeTable/${id}/${semester}/${year}`
+  )
+  return data?.data
+}
 
 export const createTimeTable = async (
   id: string,
@@ -26,32 +26,31 @@ export const createTimeTable = async (
   subjects: SubjectResponse[]
 ) => {
   const data = await httpClient.post<TimeTableResponse>(
-    `http://localhost:7005/api/timeTable/create`,
+    `/api/timeTable/create`,
     {
       studentId: id,
       semester: semester,
       year: year,
       subjects: subjects,
     }
-  );
-  return data?.data;
-};
+  )
+  return data?.data
+}
 
 export const updateTimeTable = async (
-    id: string,
-    semester: string,
-    year: string,
-    subjects: SubjectResponse[]
-  ) => {
-    const data = await httpClient.put<TimeTableResponse>(
-      `http://localhost:7005/api/timeTable/update/${id}/${semester}/${year}`,
-      {
-        studentId: id,
-        semester: semester,
-        year: year,
-        subjects: subjects,
-      }
-    );
-    return data?.data;
-  };
-  
+  id: string,
+  semester: string,
+  year: string,
+  subjects: SubjectResponse[]
+) => {
+  const data = await httpClient.put<TimeTableResponse>(
+    `/api/timeTable/update/${id}/${semester}/${year}`,
+    {
+      studentId: id,
+      semester: semester,
+      year: year,
+      subjects: subjects,
+    }
+  )
+  return data?.data
+}

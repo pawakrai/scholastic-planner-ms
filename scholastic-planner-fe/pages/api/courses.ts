@@ -1,4 +1,4 @@
-import { httpClient } from "./httpClient";
+import { httpClient } from './httpClient'
 export interface CoursesResponse {
   graduationRequirements: GraduationRequirements
   _id: string
@@ -42,13 +42,12 @@ export interface SubjectResponse {
   __v: number
 }
 
-
 export const getAllCourses = async () => {
-  const data = await httpClient.get<CoursesResponse[]>("http://localhost:7002/api/courses");
-  return data?.data;
-};
+  const data = await httpClient.get<CoursesResponse[]>('/api/courses')
+  return data?.data
+}
 
 export const getAllSubject = async () => {
-  const data = await httpClient.get<SubjectResponse[]>("http://localhost:7002/api/subjects");
-  return data?.data;
+  const data = await httpClient.get<SubjectResponse[]>('/api/subjects')
+  return data?.data
 }

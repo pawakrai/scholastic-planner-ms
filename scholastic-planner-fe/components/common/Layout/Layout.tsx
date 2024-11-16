@@ -1,73 +1,73 @@
-import React, { FC, useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { Topbar } from "@/components/common/Topbar/Topbar";
-import Sidebar from "@/components/common/Sidebar/Sidebar";
-import AuthenticationCheck from "@/hoc/AuthenticationCheck";
-import { Permission } from "@/utils/permissions";
-import { usePermission } from "@/contexts/auth/permission-context";
-import { navigatorList } from "@/pages/_navigatorList";
+import React, { FC, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { Topbar } from '@/components/common/Topbar/Topbar'
+import Sidebar from '@/components/common/Sidebar/Sidebar'
+import AuthenticationCheck from '@/hoc/AuthenticationCheck'
+import { Permission } from '@/utils/permissions'
+import { usePermission } from '@/contexts/auth/permission-context'
+import { navigatorList } from '@/components/_navigatorList'
 
 interface Props {
-  children: JSX.Element;
+  children: JSX.Element
   pageProps: {
-    mainPage: boolean;
-    permission: Permission[];
-  };
+    mainPage: boolean
+    permission: Permission[]
+  }
 }
 
 export interface NavigatorProps {
-  icon: any;
-  pathName: string;
-  name: string;
-  slug: string;
-  subMenu: SubNavigatorProps[];
+  icon: any
+  pathName: string
+  name: string
+  slug: string
+  subMenu: SubNavigatorProps[]
 }
 
 export interface SubNavigatorProps {
-  slug: string;
-  pathName: string | string[];
-  name: string;
+  slug: string
+  pathName: string | string[]
+  name: string
   // permission: Permission[];
 }
 
 const Layout: FC<Props> = ({ children, pageProps }: Props) => {
-  const { hasPermission } = usePermission();
-  const router = useRouter();
-  const [mainNavigate, SetMainNavigate] = useState<NavigatorProps[]>([]);
-  const [subNavigator, setSubNavigator] = useState<NavigatorProps>();
-  const splitPathUrl = router.pathname.split("/");
+  const { hasPermission } = usePermission()
+  const router = useRouter()
+  const [mainNavigate, SetMainNavigate] = useState<NavigatorProps[]>([])
+  const [subNavigator, setSubNavigator] = useState<NavigatorProps>()
+  const splitPathUrl = router.pathname.split('/')
   useEffect(() => {
     SetMainNavigate(
       navigatorList
         .map((main) => {
-          const subMenu = main.subMenu;
+          const subMenu = main.subMenu
           return {
             ...main,
             subMenu,
             slug: `${main.slug}${subMenu[0]?.slug}`,
-          };
+          }
         })
         .filter((main) => main.subMenu.length > 0)
-    );
-  }, []);
+    )
+  }, [])
 
   useEffect(() => {
     const navigator = mainNavigate
       .filter((item: { pathName: string }) => item.pathName === splitPathUrl[1])
       .map((item: any) => {
-        return { ...item, slug: item.slug.split("/").slice(0, -1).join("/") };
-      });
+        return { ...item, slug: item.slug.split('/').slice(0, -1).join('/') }
+      })
 
-    setSubNavigator(navigator[0]);
+    setSubNavigator(navigator[0])
 
     if (pageProps.mainPage && navigator[0]) {
-      router.push(`${navigator[0]?.slug}${navigator[0]?.subMenu[0].slug}`);
+      router.push(`${navigator[0]?.slug}${navigator[0]?.subMenu[0].slug}`)
     }
 
     // if (!pageProps.mainPage && !hasPermission(...pageProps.permission)) {
     //   router.push("/");
     // }
-  }, [router, mainNavigate]);
+  }, [router, mainNavigate])
 
   return (
     <>
@@ -81,7 +81,7 @@ const Layout: FC<Props> = ({ children, pageProps }: Props) => {
         <main className="ml-[76px] p-8 bg-[#f3f4f6]">{children}</main>
       </main>
     </>
-  );
-};
+  )
+}
 
-export default AuthenticationCheck(Layout);
+export default AuthenticationCheck(Layout)
