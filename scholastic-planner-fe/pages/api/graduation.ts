@@ -62,7 +62,7 @@ export const registerSubjectById = async (id: string) => {
 };
 
 export const updateSubjectById = async (id: string, grade: number) => {
-  const data = await httpClient.post(
+  const data = await httpClient.post<GraduationProfileResponse>(
     "http://localhost:7003/graduation/updateSubject",
     {
       subjectId: id,

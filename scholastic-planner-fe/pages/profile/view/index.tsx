@@ -66,7 +66,8 @@ function Home() {
 
     const onSubmitGradeSubject = async () => {
       setIsEdit(false);
-      await updateSubjectById(subject.id, Number(grade));
+      const _profile = await updateSubjectById(subject.id, Number(grade));
+      setProfile({ ...profile, ..._profile });
     };
 
     return (
